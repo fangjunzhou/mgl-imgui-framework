@@ -1,0 +1,14 @@
+[project]
+name = "mgl-imgui-framework"
+version = "0.1.0"
+description = "A generalized python moderngl and imgui framework"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+start = "mgl_imgui_framework.__main__:main"
