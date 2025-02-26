@@ -10,6 +10,9 @@ from imgui_bundle import imgui
 from moderngl_window.integrations.imgui_bundle import ModernglWindowRenderer
 from moderngl_window.context.base import BaseWindow, KeyModifiers, WindowConfig
 from moderngl_window.timers import BaseTimer
+from reactivex.subject import BehaviorSubject
+
+from mgl_imgui_framework.dockspace import Dockspace
 
 
 logger = logging.getLogger(__name__)
@@ -29,7 +32,11 @@ class App(WindowConfig):
     io: imgui.IO
     imgui_renderer: ModernglWindowRenderer
 
-    window_time: float = 0
+    # Render targets.
+    dockspace: Dockspace
+
+    wnd_time: BehaviorSubject[float] = BehaviorSubject(0)
+    wnd_size: BehaviorSubject[tuple[int, int]] = BehaviorSubject((0, 0))
 
     def __init__(self,
                  ctx: Optional[moderngl.Context] = None,
@@ -66,8 +73,12 @@ class App(WindowConfig):
         self.io = imgui.get_io()
         self.io.set_ini_filename("")
         self.io.set_log_filename("")
+        # Enable docking.
+        self.io.config_flags |= imgui.ConfigFlags_.docking_enable.value
         # Initialize renderer.
         self.imgui_renderer = ModernglWindowRenderer(self.wnd)
+        # Initialize dockspace.
+        self.dockspace = Dockspace(self.wnd_size)
 
     @classmethod
     def add_arguments(cls, parser: argparse.ArgumentParser):
@@ -81,8 +92,7 @@ class App(WindowConfig):
 
     def on_resize(self, width: int, height: int) -> None:
         self.imgui_renderer.resize(width, height)
-        self.wnd.render(self.timer.time, self.timer.time - self.window_time)
-        self.wnd.swap_buffers()
+        self.wnd_size.on_next(self.wnd.size)
 
     def on_close(self) -> None:
         pass
@@ -116,4 +126,14 @@ class App(WindowConfig):
         self.imgui_renderer.mouse_release_event(x, y, button)
 
     def on_render(self, time: float, frame_time: float) -> None:
-        self.window_time = time
+        self.wnd_time.on_next(time)
+
+        # ------------------ ImGUI Main Render Loop ------------------ #
+        imgui.new_frame()
+
+        self.dockspace.render(time, frame_time)
+
+        imgui.render()
+        # ------------------ ImGUI Main Render Loop ------------------ #
+
+        self.imgui_renderer.render(imgui.get_draw_data())
