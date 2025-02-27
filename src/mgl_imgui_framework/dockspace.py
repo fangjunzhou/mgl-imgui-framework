@@ -1,11 +1,23 @@
+"""
+Dockspace render target.
+Includes main menu bar, dockspace, and status bar.
+"""
+
+from typing import List
 from imgui_bundle import imgui, imgui_ctx
 from reactivex import Observable
 
+from mgl_imgui_framework.menu_item import MenuItem
 from mgl_imgui_framework.window import Window
 
 
 class Dockspace(Window):
     wnd_size: tuple[int, int] = (0, 0)
+
+    # --------------------- Dockspace State  --------------------- #
+
+    menu_items: List[MenuItem] = []
+    status_items: List[MenuItem] = []
 
     def __init__(self, wnd_size: Observable[tuple[int, int]]) -> None:
         def set_size(size: tuple[int, int]):
@@ -15,8 +27,8 @@ class Dockspace(Window):
     def render(self, time: float, frame_time: float) -> None:
         # Menu bar.
         with imgui_ctx.begin_main_menu_bar():
-            # TODO: Render main menu bar.
-            imgui.menu_item("Menu Item", "", False)
+            for status_item in self.menu_items:
+                status_item.render(time, frame_time)
 
         # Dockspace.
         side_bar_height = imgui.get_frame_height()
@@ -65,5 +77,5 @@ class Dockspace(Window):
                         imgui.WindowFlags_.no_background.value)
         with imgui_ctx.begin("Status Bar", True, window_flags):
             with imgui_ctx.begin_menu_bar():
-                # TODO: Render status bar.
-                imgui.menu_item("Status Item", "", False)
+                for status_item in self.status_items:
+                    status_item.render(time, frame_time)
