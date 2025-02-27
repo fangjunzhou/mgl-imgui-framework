@@ -3,7 +3,7 @@ Main application.
 """
 
 import logging
-from typing import Any, Optional
+from typing import Any, List, Optional
 import moderngl
 import argparse
 from imgui_bundle import imgui
@@ -13,6 +13,7 @@ from moderngl_window.timers import BaseTimer
 from reactivex.subject import BehaviorSubject
 
 from mgl_imgui_framework.dockspace import Dockspace
+from mgl_imgui_framework.window import Window
 
 
 logger = logging.getLogger(__name__)
@@ -34,6 +35,7 @@ class App(WindowConfig):
 
     # Render targets.
     dockspace: Dockspace
+    windows: List[Window]
 
     wnd_time: BehaviorSubject[float] = BehaviorSubject(0)
     wnd_size: BehaviorSubject[tuple[int, int]] = BehaviorSubject((0, 0))
@@ -79,6 +81,8 @@ class App(WindowConfig):
         self.imgui_renderer = ModernglWindowRenderer(self.wnd)
         # Initialize dockspace.
         self.dockspace = Dockspace(self.wnd_size)
+        # Initialize windows.
+        self.windows = []
 
     @classmethod
     def add_arguments(cls, parser: argparse.ArgumentParser):
@@ -132,6 +136,8 @@ class App(WindowConfig):
         imgui.new_frame()
 
         self.dockspace.render(time, frame_time)
+        for window in self.windows:
+            window.render(time, frame_time)
 
         imgui.render()
         # ------------------ ImGUI Main Render Loop ------------------ #
