@@ -6,11 +6,10 @@ from collections.abc import Callable
 from imgui_bundle import imgui, imgui_ctx
 from reactivex import Observable
 from reactivex.subject import BehaviorSubject
-from mgl_imgui_framework.menu_item import MenuItem
-from mgl_imgui_framework.window import Window
+from mgl_imgui_framework.render_target import RenderTarget
 
 
-class CounterMenuItem(MenuItem):
+class CounterMenuItem(RenderTarget):
     # Window open state.
     open: bool
     # Change open status callback.
@@ -32,7 +31,7 @@ class CounterMenuItem(MenuItem):
             self.on_change(new_open)
 
 
-class CounterWindow(Window):
+class CounterWindow(RenderTarget):
     # Window open state.
     open: bool
     # Close window callback.

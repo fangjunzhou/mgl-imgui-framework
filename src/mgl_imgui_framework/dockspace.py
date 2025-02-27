@@ -7,17 +7,16 @@ from typing import List
 from imgui_bundle import imgui, imgui_ctx
 from reactivex import Observable
 
-from mgl_imgui_framework.menu_item import MenuItem
-from mgl_imgui_framework.window import Window
+from mgl_imgui_framework.render_target import RenderTarget
 
 
-class Dockspace(Window):
+class Dockspace(RenderTarget):
     wnd_size: tuple[int, int] = (0, 0)
 
     # --------------------- Dockspace State  --------------------- #
 
-    menu_items: List[MenuItem] = []
-    status_items: List[MenuItem] = []
+    menu_items: List[RenderTarget] = []
+    status_items: List[RenderTarget] = []
 
     def __init__(self, wnd_size: Observable[tuple[int, int]]) -> None:
         def set_size(size: tuple[int, int]):

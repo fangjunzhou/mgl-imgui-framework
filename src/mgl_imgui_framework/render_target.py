@@ -1,11 +1,11 @@
 """
-Window abstract class.
+A render target that can be handled by ImGUI.
 """
 
 from abc import ABC, abstractmethod
 
 
-class Window(ABC):
+class RenderTarget(ABC):
     @abstractmethod
     def render(self, time: float, frame_time: float) -> None:
         """

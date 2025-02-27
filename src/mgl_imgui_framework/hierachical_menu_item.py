@@ -1,12 +1,16 @@
+"""
+Expandable hierarchical menu item.
+"""
+
 from typing import List
 
 from imgui_bundle import imgui
-from mgl_imgui_framework.menu_item import MenuItem
+from mgl_imgui_framework.render_target import RenderTarget
 
 
-class HierarchicalMenuItem(MenuItem):
+class HierarchicalMenuItem(RenderTarget):
     name: str
-    menu_items: List[MenuItem]
+    menu_items: List[RenderTarget]
 
     def __init__(self, name: str) -> None:
         self.name = name

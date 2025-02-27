@@ -13,7 +13,7 @@ from moderngl_window.timers import BaseTimer
 from reactivex.subject import BehaviorSubject
 
 from mgl_imgui_framework.dockspace import Dockspace
-from mgl_imgui_framework.window import Window
+from mgl_imgui_framework.render_target import RenderTarget
 
 
 logger = logging.getLogger(__name__)
@@ -35,7 +35,7 @@ class App(WindowConfig):
 
     # Render targets.
     dockspace: Dockspace
-    windows: List[Window]
+    render_targets: List[RenderTarget]
 
     wnd_time: BehaviorSubject[float] = BehaviorSubject(0)
     wnd_size: BehaviorSubject[tuple[int, int]] = BehaviorSubject((0, 0))
@@ -82,7 +82,7 @@ class App(WindowConfig):
         # Initialize dockspace.
         self.dockspace = Dockspace(self.wnd_size)
         # Initialize windows.
-        self.windows = []
+        self.render_targets = []
 
     @classmethod
     def add_arguments(cls, parser: argparse.ArgumentParser):
@@ -136,8 +136,8 @@ class App(WindowConfig):
         imgui.new_frame()
 
         self.dockspace.render(time, frame_time)
-        for window in self.windows:
-            window.render(time, frame_time)
+        for target in self.render_targets:
+            target.render(time, frame_time)
 
         imgui.render()
         # ------------------ ImGUI Main Render Loop ------------------ #

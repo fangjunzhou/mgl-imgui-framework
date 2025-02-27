@@ -1,9 +1,9 @@
 from typing import List
 from imgui_bundle import imgui
-from mgl_imgui_framework.menu_item import MenuItem
+from mgl_imgui_framework.render_target import RenderTarget
 
 
-class FpsCounter(MenuItem):
+class FpsCounter(RenderTarget):
     buf: List[float]
     idx: int = 0
     disp_fps: int = 0

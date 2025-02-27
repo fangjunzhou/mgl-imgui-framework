@@ -11,7 +11,7 @@ from mgl_imgui_framework.app import App
 from mgl_imgui_framework.examples.counter.counter import CounterMenuItem, CounterWindow
 from mgl_imgui_framework.examples.demo.imgui_demo import ImGUIDemoMenuItem, ImGUIDemoWindow
 from mgl_imgui_framework.utils.fps_counter import FpsCounter
-from mgl_imgui_framework.utils.hierachical_menu_item import HierarchicalMenuItem
+from mgl_imgui_framework.hierachical_menu_item import HierarchicalMenuItem
 
 
 class DemoApp(App):
@@ -55,8 +55,8 @@ class DemoApp(App):
         example_menu_item.menu_items.append(counter_menu_item)
 
         # Register windows.
-        self.windows.append(imgui_demo_window)
-        self.windows.append(counter_window)
+        self.render_targets.append(imgui_demo_window)
+        self.render_targets.append(counter_window)
         # Register menu item.
         self.dockspace.menu_items.append(example_menu_item)
         # Register status bar item.

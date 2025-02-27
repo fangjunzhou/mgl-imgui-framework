@@ -5,11 +5,10 @@ The mgl_imgui wrapper for imgui demo window.
 from collections.abc import Callable
 from imgui_bundle import imgui
 from reactivex import Observable
-from mgl_imgui_framework.menu_item import MenuItem
-from mgl_imgui_framework.window import Window
+from mgl_imgui_framework.render_target import RenderTarget
 
 
-class ImGUIDemoMenuItem(MenuItem):
+class ImGUIDemoMenuItem(RenderTarget):
     # Window open state.
     open: bool
     # Change open status callback.
@@ -31,7 +30,7 @@ class ImGUIDemoMenuItem(MenuItem):
             self.on_change(new_open)
 
 
-class ImGUIDemoWindow(Window):
+class ImGUIDemoWindow(RenderTarget):
     # Window open state.
     open: bool
     # Close window callback.
