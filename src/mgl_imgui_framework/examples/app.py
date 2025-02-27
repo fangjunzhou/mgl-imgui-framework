@@ -9,6 +9,7 @@ from moderngl_window.timers import BaseTimer
 from reactivex.subject import BehaviorSubject
 from mgl_imgui_framework.app import App
 from mgl_imgui_framework.examples.imgui_demo import ImGUIDemoMenuItem, ImGUIDemoWindow
+from mgl_imgui_framework.utils.fps_counter import FpsCounter
 
 
 class DemoApp(App):
@@ -37,3 +38,5 @@ class DemoApp(App):
             ImGUIDemoMenuItem(
                 self.demo_window_opened,
                 set_demo_window_opened))
+        # Register status bar item.
+        self.dockspace.status_items.append(FpsCounter())
