@@ -10,6 +10,7 @@ from reactivex.subject import BehaviorSubject
 from mgl_imgui_framework.app import App
 from mgl_imgui_framework.examples.counter.counter import CounterWindow
 from mgl_imgui_framework.examples.demo.imgui_demo import ImGUIDemoWindow
+from mgl_imgui_framework.examples.multiprocessing.mp_window import MPWindow
 from mgl_imgui_framework.render_targets.menu_item import MenuItem
 from mgl_imgui_framework.utils.fps_counter import FpsCounter
 from mgl_imgui_framework.hierachical_menu_item import HierarchicalMenuItem
@@ -22,6 +23,7 @@ class DemoApp(App):
     # Window state.
     demo_window_opened: BehaviorSubject[bool] = BehaviorSubject(False)
     counter_window_opened: BehaviorSubject[bool] = BehaviorSubject(False)
+    mp_window_opened: BehaviorSubject[bool] = BehaviorSubject(False)
 
     def __init__(self,
                  ctx: Optional[moderngl.Context] = None,
@@ -54,14 +56,27 @@ class DemoApp(App):
             self.counter_window_opened,
             set_counter_window_opened)
 
+        # ------------------ Multiprocessing Window ------------------ #
+        def set_mp_window_opened(new_opened: bool):
+            self.mp_window_opened.on_next(new_opened)
+        mp_window = MPWindow(
+            self.mp_window_opened,
+            lambda: set_mp_window_opened(False))
+        mp_menu_item = MenuItem(
+            "Multiprocessing Window",
+            self.mp_window_opened,
+            set_mp_window_opened)
+
         # -------------------- Example Menu Item  -------------------- #
         example_menu_item = HierarchicalMenuItem("Example")
         example_menu_item.menu_items.append(imgui_demo_menu_item)
         example_menu_item.menu_items.append(counter_menu_item)
+        example_menu_item.menu_items.append(mp_menu_item)
 
         # Register windows.
         self.render_targets.append(imgui_demo_window)
         self.render_targets.append(counter_window)
+        self.render_targets.append(mp_window)
         # Register menu item.
         self.dockspace.menu_items.append(example_menu_item)
         # Register status bar item.
