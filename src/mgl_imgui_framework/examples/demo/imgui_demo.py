@@ -6,6 +6,7 @@ from collections.abc import Callable
 from imgui_bundle import imgui
 from reactivex import Observable
 from mgl_imgui_framework.render_target import RenderTarget
+from mgl_imgui_framework.window import Window
 
 
 class ImGUIDemoMenuItem(RenderTarget):
@@ -30,23 +31,16 @@ class ImGUIDemoMenuItem(RenderTarget):
             self.on_change(new_open)
 
 
-class ImGUIDemoWindow(RenderTarget):
-    # Window open state.
-    open: bool
-    # Close window callback.
-    on_close: Callable[[], None]
-
+class ImGUIDemoWindow(Window):
     def __init__(
         self,
-        open: Observable[bool],
+        open: Observable[bool] | None = None,
         on_close: Callable[[],
-                           None]) -> None:
-        def set_open(open: bool):
-            self.open = open
-        open.subscribe(set_open)
-        self.on_close = on_close
+                           None] | None = None) -> None:
+        super().__init__("ImGUI Demo Window", open, on_close)
 
     def render(self, time: float, frame_time: float) -> None:
-        if self.open:
+        if self.open is None or self.open:
             if not imgui.show_demo_window(self.open):
-                self.on_close()
+                if self.on_close is not None:
+                    self.on_close()

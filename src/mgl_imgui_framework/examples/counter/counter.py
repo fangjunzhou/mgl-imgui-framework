@@ -7,6 +7,7 @@ from imgui_bundle import imgui, imgui_ctx
 from reactivex import Observable
 from reactivex.subject import BehaviorSubject
 from mgl_imgui_framework.render_target import RenderTarget
+from mgl_imgui_framework.window import Window
 
 
 class CounterMenuItem(RenderTarget):
@@ -31,23 +32,15 @@ class CounterMenuItem(RenderTarget):
             self.on_change(new_open)
 
 
-class CounterWindow(RenderTarget):
-    # Window open state.
-    open: bool
-    # Close window callback.
-    on_close: Callable[[], None]
-
+class CounterWindow(Window):
     count: BehaviorSubject[int] = BehaviorSubject(0)
 
     def __init__(
         self,
-        open: Observable[bool],
+        open: Observable[bool] | None = None,
         on_close: Callable[[],
-                           None]) -> None:
-        def set_open(open: bool):
-            self.open = open
-        open.subscribe(set_open)
-        self.on_close = on_close
+                           None] | None = None) -> None:
+        super().__init__("Counter", open, on_close)
 
     def increase(self):
         self.count.on_next(self.count.value + 1)
@@ -55,15 +48,10 @@ class CounterWindow(RenderTarget):
     def clear(self):
         self.count.on_next(0)
 
-    def render(self, time: float, frame_time: float) -> None:
-        if self.open:
-            with imgui_ctx.begin("Counter", self.open) as window:
-                if not window.opened:
-                    self.on_close()
+    def render_window(self, time: float, frame_time: float) -> None:
+        imgui.text(f"Current count: {self.count.value}")
 
-                imgui.text(f"Current count: {self.count.value}")
-
-                if imgui.button("Increase"):
-                    self.increase()
-                if imgui.button("Clear"):
-                    self.clear()
+        if imgui.button("Increase"):
+            self.increase()
+        if imgui.button("Clear"):
+            self.clear()
