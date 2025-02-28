@@ -6,6 +6,10 @@ from abc import ABC, abstractmethod
 
 
 class RenderTarget(ABC):
+    def on_exit(self):
+        """This method will be called when the application exists."""
+        pass
+
     @abstractmethod
     def render(self, time: float, frame_time: float) -> None:
         """

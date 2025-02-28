@@ -99,7 +99,8 @@ class App(WindowConfig):
         self.wnd_size.on_next(self.wnd.size)
 
     def on_close(self) -> None:
-        pass
+        for render_target in self.render_targets:
+            render_target.on_exit()
 
     def on_iconify(self, iconified: bool) -> None:
         pass
