@@ -5,30 +5,7 @@ The mgl_imgui wrapper for imgui demo window.
 from collections.abc import Callable
 from imgui_bundle import imgui
 from reactivex import Observable
-from mgl_imgui_framework.render_target import RenderTarget
-from mgl_imgui_framework.window import Window
-
-
-class ImGUIDemoMenuItem(RenderTarget):
-    # Window open state.
-    open: bool
-    # Change open status callback.
-    on_change: Callable[[bool], None]
-
-    def __init__(
-        self,
-        open: Observable[bool],
-        on_change: Callable[[bool],
-                            None]) -> None:
-        def set_open(open: bool):
-            self.open = open
-        open.subscribe(set_open)
-        self.on_change = on_change
-
-    def render(self, time: float, frame_time: float) -> None:
-        changed, new_open = imgui.menu_item("ImGUI Demo Window", "", self.open)
-        if changed:
-            self.on_change(new_open)
+from mgl_imgui_framework.render_targets.window import Window
 
 
 class ImGUIDemoWindow(Window):

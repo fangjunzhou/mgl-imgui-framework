@@ -8,8 +8,9 @@ from moderngl_window.context.base import BaseWindow
 from moderngl_window.timers import BaseTimer
 from reactivex.subject import BehaviorSubject
 from mgl_imgui_framework.app import App
-from mgl_imgui_framework.examples.counter.counter import CounterMenuItem, CounterWindow
-from mgl_imgui_framework.examples.demo.imgui_demo import ImGUIDemoMenuItem, ImGUIDemoWindow
+from mgl_imgui_framework.examples.counter.counter import CounterWindow
+from mgl_imgui_framework.examples.demo.imgui_demo import ImGUIDemoWindow
+from mgl_imgui_framework.render_targets.menu_item import MenuItem
 from mgl_imgui_framework.utils.fps_counter import FpsCounter
 from mgl_imgui_framework.hierachical_menu_item import HierarchicalMenuItem
 
@@ -36,8 +37,10 @@ class DemoApp(App):
         imgui_demo_window = ImGUIDemoWindow(
             self.demo_window_opened,
             lambda: set_demo_window_opened(False))
-        imgui_demo_menu_item = ImGUIDemoMenuItem(
-            self.demo_window_opened, set_demo_window_opened)
+        imgui_demo_menu_item = MenuItem(
+            "ImGUI Demo Window",
+            self.demo_window_opened,
+            set_demo_window_opened)
 
         # ---------------------- Counter Window ---------------------- #
 
@@ -46,8 +49,10 @@ class DemoApp(App):
         counter_window = CounterWindow(
             self.counter_window_opened,
             lambda: set_counter_window_opened(False))
-        counter_menu_item = CounterMenuItem(
-            self.counter_window_opened, set_counter_window_opened)
+        counter_menu_item = MenuItem(
+            "Counter Window",
+            self.counter_window_opened,
+            set_counter_window_opened)
 
         # -------------------- Example Menu Item  -------------------- #
         example_menu_item = HierarchicalMenuItem("Example")

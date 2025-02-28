@@ -1,3 +1,7 @@
+"""
+Window base class that handles basic window interaction.
+"""
+
 from collections.abc import Callable
 from imgui_bundle import imgui, imgui_ctx
 from reactivex import Observable
@@ -22,6 +26,7 @@ class Window(RenderTarget):
 
         def set_open(open: bool):
             self.open = open
+            self.on_open_changed(open)
         if open is not None:
             open.subscribe(set_open)
         else:
@@ -29,6 +34,13 @@ class Window(RenderTarget):
 
         # Set close window callback.
         self.on_close = on_close
+
+    def on_open_changed(self, open: bool):
+        """This method is called when self.open state changed.
+
+        :param open: new open state.
+        """
+        pass
 
     def render(self, time: float, frame_time: float) -> None:
         if self.open is None or self.open:
