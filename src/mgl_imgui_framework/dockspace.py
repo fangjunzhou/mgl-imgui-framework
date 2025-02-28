@@ -10,18 +10,28 @@ from reactivex import Observable
 from mgl_imgui_framework.render_target import RenderTarget
 
 
+class DockspaceBuilder:
+    def build(self, dockspace_id: int):
+        pass
+
+
 class Dockspace(RenderTarget):
     wnd_size: tuple[int, int] = (0, 0)
+    builder: DockspaceBuilder | None
 
     # --------------------- Dockspace State  --------------------- #
 
     menu_items: List[RenderTarget] = []
     status_items: List[RenderTarget] = []
 
-    def __init__(self, wnd_size: Observable[tuple[int, int]]) -> None:
+    def __init__(self,
+                 wnd_size: Observable[tuple[int,
+                                            int]],
+                 builder: DockspaceBuilder | None = None) -> None:
         def set_size(size: tuple[int, int]):
             self.wnd_size = size
         wnd_size.subscribe(set_size)
+        self.builder = builder
 
     def render(self, time: float, frame_time: float) -> None:
         # Menu bar.
@@ -44,21 +54,8 @@ class Dockspace(RenderTarget):
         with imgui_ctx.begin("Dockspace Window", True, window_flags):
             # Dockspace.
             dockspace_id = imgui.get_id("Dockspace")
-            # Build dock space.
-            if not imgui.internal.dock_builder_get_node(dockspace_id):
-                imgui.internal.dock_builder_remove_node(dockspace_id)
-                imgui.internal.dock_builder_add_node(dockspace_id)
-                res = imgui.internal.dock_builder_split_node(
-                    dockspace_id, imgui.Dir.left, 0.7)
-                mesh_viewer_id = res.id_at_dir
-                mesh_viewer_control = res.id_at_opposite_dir
-                imgui.internal.dock_builder_dock_window(
-                    "Mesh Viewer", mesh_viewer_id)
-                imgui.internal.dock_builder_dock_window(
-                    "Mesh Viewer Camera Control", mesh_viewer_control)
-                imgui.internal.dock_builder_dock_window(
-                    "Mesh Viewer Shading Control", mesh_viewer_control)
-                imgui.internal.dock_builder_finish(dockspace_id)
+            if self.builder:
+                self.builder.build(dockspace_id)
             imgui.dock_space(dockspace_id)
 
         # Status bar.

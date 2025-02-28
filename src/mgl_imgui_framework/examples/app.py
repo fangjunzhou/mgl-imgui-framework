@@ -10,6 +10,7 @@ from reactivex.subject import BehaviorSubject
 from mgl_imgui_framework.app import App
 from mgl_imgui_framework.examples.counter.counter import CounterWindow
 from mgl_imgui_framework.examples.demo.imgui_demo import ImGUIDemoWindow
+from mgl_imgui_framework.examples.dockspace_builder import DemoBuilder
 from mgl_imgui_framework.examples.multiprocessing.mp_window import MPWindow
 from mgl_imgui_framework.render_targets.menu_item import MenuItem
 from mgl_imgui_framework.utils.fps_counter import FpsCounter
@@ -21,9 +22,9 @@ class DemoApp(App):
     title = "ModernGL ImGUI Demo"
 
     # Window state.
-    demo_window_opened: BehaviorSubject[bool] = BehaviorSubject(False)
-    counter_window_opened: BehaviorSubject[bool] = BehaviorSubject(False)
-    mp_window_opened: BehaviorSubject[bool] = BehaviorSubject(False)
+    demo_window_opened: BehaviorSubject[bool] = BehaviorSubject(True)
+    counter_window_opened: BehaviorSubject[bool] = BehaviorSubject(True)
+    mp_window_opened: BehaviorSubject[bool] = BehaviorSubject(True)
 
     def __init__(self,
                  ctx: Optional[moderngl.Context] = None,
@@ -81,3 +82,6 @@ class DemoApp(App):
         self.dockspace.menu_items.append(example_menu_item)
         # Register status bar item.
         self.dockspace.status_items.append(FpsCounter())
+
+        # Load dockspace builder.
+        self.dockspace.builder = DemoBuilder()

@@ -17,7 +17,7 @@ class CounterWindow(Window):
         open: Observable[bool] | None = None,
         on_close: Callable[[],
                            None] | None = None) -> None:
-        super().__init__("Counter", open, on_close)
+        super().__init__("Counter Window", open, on_close)
 
     def increase(self):
         self.count.on_next(self.count.value + 1)
