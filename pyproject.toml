@@ -9,6 +9,7 @@ dependencies = [
     "moderngl-window[imgui]>=3.1.1",
     "imgui-bundle>=1.6.2",
     "reactivex>=4.0.4",
+    "pyrsistent>=0.20.0",
 ]
 
 [build-system]
