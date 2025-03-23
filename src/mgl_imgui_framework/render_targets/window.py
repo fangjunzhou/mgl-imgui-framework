@@ -11,6 +11,11 @@ from mgl_imgui_framework.render_target import RenderTarget
 class Window(RenderTarget):
     # Window name.
     name: str
+    size: tuple[int, int] = (480, 320)
+    size_min: tuple[int, int] = (0, 0)
+    size_max: tuple[int, int] = (0, 0)
+    window_flags: int = imgui.WindowFlags_.none.value
+
     # Window open state.
     open: bool | None
     # Close window callback.
@@ -44,7 +49,14 @@ class Window(RenderTarget):
 
     def render(self, time: float, frame_time: float) -> None:
         if self.open is None or self.open:
-            with imgui_ctx.begin(self.name, self.open) as window:
+            imgui.set_next_window_size(self.size, imgui.Cond_.once.value)
+            imgui.set_next_window_size_constraints(
+                self.size_min, self.size_max)
+            with imgui_ctx.begin(
+                    self.name,
+                    self.open,
+                    self.window_flags
+            ) as window:
                 if not window.opened and self.on_close is not None:
                     self.on_close()
                 self.render_window(time, frame_time)
