@@ -40,11 +40,13 @@ class App(WindowConfig):
     wnd_time: BehaviorSubject[float] = BehaviorSubject(0)
     wnd_size: BehaviorSubject[tuple[int, int]] = BehaviorSubject((0, 0))
 
-    def __init__(self,
-                 ctx: Optional[moderngl.Context] = None,
-                 wnd: Optional[BaseWindow] = None,
-                 timer: Optional[BaseTimer] = None,
-                 **kwargs: Any) -> None:
+    def __init__(
+        self,
+        ctx: Optional[moderngl.Context] = None,
+        wnd: Optional[BaseWindow] = None,
+        timer: Optional[BaseTimer] = None,
+        **kwargs: Any,
+    ) -> None:
         super().__init__(ctx, wnd, timer, **kwargs)
         # Initialize logging.
         if self.argv:
@@ -61,7 +63,7 @@ class App(WindowConfig):
                 raise ValueError(f"Log level {log_level_arg} doesn't exist.")
         logging.basicConfig(
             level=self.log_level,
-            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         )
         logger.info("WindowConfig initialized.")
         logger.info(f"Current OpenGL version: {self.gl_version}")
@@ -91,7 +93,7 @@ class App(WindowConfig):
             "--log",
             choices=["INFO", "WARN", "DEBUG", "ERROR"],
             default="WARN",
-            type=str
+            type=str,
         )
 
     def on_resize(self, width: int, height: int) -> None:
@@ -105,11 +107,7 @@ class App(WindowConfig):
     def on_iconify(self, iconified: bool) -> None:
         pass
 
-    def on_key_event(
-            self,
-            key: Any,
-            action: Any,
-            modifiers: KeyModifiers) -> None:
+    def on_key_event(self, key: Any, action: Any, modifiers: KeyModifiers) -> None:
         self.imgui_renderer.key_event(key, action, modifiers)
 
     def on_unicode_char_entered(self, char: str) -> None:

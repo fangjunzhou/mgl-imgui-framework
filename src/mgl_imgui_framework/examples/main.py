@@ -15,10 +15,7 @@ def main():
         args.append("-wnd")
         args.append("glfw")
     # Start the applicantion.
-    moderngl_window.run_window_config(
-        DemoApp,
-        args=args
-    )
+    moderngl_window.run_window_config(DemoApp, args=args)
 
 
 if __name__ == "__main__":

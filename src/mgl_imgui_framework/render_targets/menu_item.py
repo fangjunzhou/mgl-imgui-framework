@@ -2,7 +2,6 @@
 MenuItem class that handles its open state.
 """
 
-
 from collections.abc import Callable
 
 from imgui_bundle import imgui
@@ -19,14 +18,16 @@ class MenuItem(RenderTarget):
     on_change: Callable[[bool], None] | None
 
     def __init__(
-            self,
-            name: str,
-            open: Observable[bool],
-            on_change: Callable[[bool], None] | None) -> None:
+        self,
+        name: str,
+        open: Observable[bool],
+        on_change: Callable[[bool], None] | None,
+    ) -> None:
         self.name = name
 
         def set_open(open: bool):
             self.open = open
+
         open.subscribe(set_open)
         self.on_change = on_change
 

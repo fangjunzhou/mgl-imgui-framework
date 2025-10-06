@@ -12,8 +12,8 @@ class ImGUIDemoWindow(Window):
     def __init__(
         self,
         open: Observable[bool] | None = None,
-        on_close: Callable[[],
-                           None] | None = None) -> None:
+        on_close: Callable[[], None] | None = None,
+    ) -> None:
         super().__init__("ImGUI Demo Window", open, on_close)
 
     def render(self, time: float, frame_time: float) -> None:

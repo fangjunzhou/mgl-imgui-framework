@@ -22,16 +22,18 @@ class Window(RenderTarget):
     on_close: Callable[[], None] | None
 
     def __init__(
-            self,
-            name: str,
-            open: Observable[bool] | None = None,
-            on_close: Callable[[], None] | None = None) -> None:
+        self,
+        name: str,
+        open: Observable[bool] | None = None,
+        on_close: Callable[[], None] | None = None,
+    ) -> None:
         self.name = name
         # Subscribe open window state.
 
         def set_open(open: bool):
             self.open = open
             self.on_open_changed(open)
+
         if open is not None:
             open.subscribe(set_open)
         else:
@@ -50,13 +52,8 @@ class Window(RenderTarget):
     def render(self, time: float, frame_time: float) -> None:
         if self.open is None or self.open:
             imgui.set_next_window_size(self.size, imgui.Cond_.once.value)
-            imgui.set_next_window_size_constraints(
-                self.size_min, self.size_max)
-            with imgui_ctx.begin(
-                    self.name,
-                    self.open,
-                    self.window_flags
-            ) as window:
+            imgui.set_next_window_size_constraints(self.size_min, self.size_max)
+            with imgui_ctx.begin(self.name, self.open, self.window_flags) as window:
                 if not window.opened and self.on_close is not None:
                     self.on_close()
                 self.render_window(time, frame_time)

@@ -26,47 +26,47 @@ class DemoApp(App):
     counter_window_opened: BehaviorSubject[bool] = BehaviorSubject(True)
     mp_window_opened: BehaviorSubject[bool] = BehaviorSubject(True)
 
-    def __init__(self,
-                 ctx: Optional[moderngl.Context] = None,
-                 wnd: Optional[BaseWindow] = None,
-                 timer: Optional[BaseTimer] = None,
-                 **kwargs: Any) -> None:
+    def __init__(
+        self,
+        ctx: Optional[moderngl.Context] = None,
+        wnd: Optional[BaseWindow] = None,
+        timer: Optional[BaseTimer] = None,
+        **kwargs: Any,
+    ) -> None:
         super().__init__(ctx, wnd, timer, **kwargs)
 
         # -------------------- ImGUI Demo Window  -------------------- #
 
         def set_demo_window_opened(new_opened: bool):
             self.demo_window_opened.on_next(new_opened)
+
         imgui_demo_window = ImGUIDemoWindow(
-            self.demo_window_opened,
-            lambda: set_demo_window_opened(False))
+            self.demo_window_opened, lambda: set_demo_window_opened(False)
+        )
         imgui_demo_menu_item = MenuItem(
-            "ImGUI Demo Window",
-            self.demo_window_opened,
-            set_demo_window_opened)
+            "ImGUI Demo Window", self.demo_window_opened, set_demo_window_opened
+        )
 
         # ---------------------- Counter Window ---------------------- #
 
         def set_counter_window_opened(new_opened: bool):
             self.counter_window_opened.on_next(new_opened)
+
         counter_window = CounterWindow(
-            self.counter_window_opened,
-            lambda: set_counter_window_opened(False))
+            self.counter_window_opened, lambda: set_counter_window_opened(False)
+        )
         counter_menu_item = MenuItem(
-            "Counter Window",
-            self.counter_window_opened,
-            set_counter_window_opened)
+            "Counter Window", self.counter_window_opened, set_counter_window_opened
+        )
 
         # ------------------ Multiprocessing Window ------------------ #
         def set_mp_window_opened(new_opened: bool):
             self.mp_window_opened.on_next(new_opened)
-        mp_window = MPWindow(
-            self.mp_window_opened,
-            lambda: set_mp_window_opened(False))
+
+        mp_window = MPWindow(self.mp_window_opened, lambda: set_mp_window_opened(False))
         mp_menu_item = MenuItem(
-            "Multiprocessing Window",
-            self.mp_window_opened,
-            set_mp_window_opened)
+            "Multiprocessing Window", self.mp_window_opened, set_mp_window_opened
+        )
 
         # -------------------- Example Menu Item  -------------------- #
         example_menu_item = HierarchicalMenuItem("Example")
