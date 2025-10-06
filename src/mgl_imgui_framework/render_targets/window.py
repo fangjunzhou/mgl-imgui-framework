@@ -12,8 +12,8 @@ class Window(RenderTarget):
     # Window name.
     name: str
     size: tuple[int, int] = (480, 320)
-    size_min: tuple[int, int] = (0, 0)
-    size_max: tuple[int, int] = (0, 0)
+    size_min: tuple[float, float] = (0, 0)
+    size_max: tuple[float, float] = (imgui.FLT_MAX, imgui.FLT_MAX)
     window_flags: int = imgui.WindowFlags_.none.value
 
     # Window open state.
