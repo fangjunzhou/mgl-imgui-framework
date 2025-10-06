@@ -6,14 +6,15 @@ from collections.abc import Callable
 from imgui_bundle import imgui, imgui_ctx
 from reactivex import Observable
 from mgl_imgui_framework.render_target import RenderTarget
+from reactivex.subject import BehaviorSubject
 
 
 class Window(RenderTarget):
     # Window name.
     name: str
-    size: tuple[int, int] = (480, 320)
-    size_min: tuple[float, float] = (0, 0)
-    size_max: tuple[float, float] = (imgui.FLT_MAX, imgui.FLT_MAX)
+    size: tuple = (480, 320)
+    size_min: tuple = (0, 0)
+    size_max: tuple = (imgui.FLT_MAX, imgui.FLT_MAX)
     window_flags: int = imgui.WindowFlags_.none.value
 
     # Window open state.
