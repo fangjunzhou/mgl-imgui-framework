@@ -21,3 +21,7 @@ class HierarchicalMenuItem(RenderTarget):
             for menu_item in self.menu_items:
                 menu_item.render(time, frame_time)
             imgui.end_menu()
+
+    def on_exit(self):
+        for menu_item in self.menu_items:
+            menu_item.on_exit()

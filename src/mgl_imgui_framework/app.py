@@ -103,6 +103,10 @@ class App(WindowConfig):
     def on_close(self) -> None:
         for render_target in self.render_targets:
             render_target.on_exit()
+        for menu_target in self.dockspace.menu_items:
+            menu_target.on_exit()
+        for status_target in self.dockspace.status_items:
+            status_target.on_exit()
 
     def on_iconify(self, iconified: bool) -> None:
         pass
